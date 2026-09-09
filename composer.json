@@ -1,16 +1,24 @@
 {
   "name": "happiness/fortnox-bundle",
   "description": "Kimai plugin for generating Fortnox customer invoice time-report attachments.",
+  "homepage": "https://github.com/happiness/FortnoxBundle",
   "type": "kimai-plugin",
   "version": "0.1.1",
-  "license": "MIT",
+  "require": {
+    "php": ">=8.2",
+    "kimai/kimai": ">=2.0.0"
+  },
+  "keywords": [
+    "kimai",
+    "kimai-plugin",
+    "fortnox"
+  ],
+  "license": "AGPL-3.0-or-later",
   "extra": {
     "kimai": {
       "require": 26300,
-      "name": "FortnoxBundle"
+      "name": "FortnoxBundle",
+      "version": "0.1.1"
     }
-  },
-  "require": {
-    "php": ">=8.2"
   }
 }
