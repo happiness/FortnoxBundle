@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    KimaiPlugin\FortnoxBundle\:
+        resource: '../../*'
+        exclude:
+            - '../../Resources/'
+
+    KimaiPlugin\FortnoxBundle\Controller\:
+        resource: '../../Controller/'
+        tags: ['controller.service_arguments']

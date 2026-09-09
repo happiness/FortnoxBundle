@@ -1,0 +1,17 @@
+fortnox:
+    menu: 'Fortnox export'
+    title: 'Fortnox tidrapport'
+    filters: 'Rapporturval'
+    preview: 'Förhandsgranska'
+    preview_title: 'Förhandsgranskning av tidrapport'
+    no_entries: 'Inga matchande tidposter hittades.'
+    download_pdf: 'Ladda ner PDF'
+    form:
+        customer: 'Kund'
+        project: 'Projekt'
+        begin: 'Från'
+        end: 'Till'
+        billable_only: 'Endast debiterbar tid'
+        not_exported_only: 'Endast ej exporterad tid'
+        choose_customer: 'Välj kund'
+        choose_project: 'Välj projekt'

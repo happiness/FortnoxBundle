@@ -1,0 +1,17 @@
+fortnox:
+    menu: 'Fortnox export'
+    title: 'Fortnox time report'
+    filters: 'Report selection'
+    preview: 'Preview'
+    preview_title: 'Time report preview'
+    no_entries: 'No matching time entries were found.'
+    download_pdf: 'Download PDF'
+    form:
+        customer: 'Customer'
+        project: 'Project'
+        begin: 'From'
+        end: 'To'
+        billable_only: 'Billable only'
+        not_exported_only: 'Not exported only'
+        choose_customer: 'Choose customer'
+        choose_project: 'Choose project'
