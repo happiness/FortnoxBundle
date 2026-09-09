@@ -7,7 +7,7 @@
   "extra": {
     "kimai": {
       "require": 26300,
-      "name": "Fortnox"
+      "name": "FortnoxBundle"
     }
   },
   "require": {
