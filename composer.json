@@ -2,7 +2,7 @@
   "name": "local/fortnox-bundle",
   "description": "Kimai plugin for generating Fortnox customer invoice time-report attachments.",
   "type": "kimai-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "extra": {
     "kimai": {
