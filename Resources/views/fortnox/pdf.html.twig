@@ -6,8 +6,6 @@
     <style>
         body { font-family: sans-serif; font-size: 10pt; color: #222; }
         h1 { font-size: 18pt; margin: 0 0 12px 0; }
-        .meta { margin-bottom: 18px; }
-        .meta td { padding: 2px 12px 2px 0; }
         table.entries { width: 100%; border-collapse: collapse; }
         .entries th { border-bottom: 1px solid #444; text-align: left; padding: 6px 4px; }
         .entries td { border-bottom: 1px solid #ddd; padding: 6px 4px; vertical-align: top; }
@@ -18,17 +16,11 @@
 </head>
 <body>
 <h1>Tidrapport</h1>
-<table class="meta">
-    <tr><td><strong>Kund</strong></td><td>{{ filter.customer.name }}</td></tr>
-    <tr><td><strong>Projekt</strong></td><td>{{ filter.project.name }}</td></tr>
-    <tr><td><strong>Period</strong></td><td>{{ filter.begin|date('Y-m-d') }} till {{ filter.end|date('Y-m-d') }}</td></tr>
-</table>
 
 <table class="entries">
     <thead>
     <tr>
         <th>Datum</th>
-        <th>Konsult</th>
         <th>Aktivitet</th>
         <th>Beskrivning</th>
         <th class="duration">Tid</th>
@@ -40,16 +32,15 @@
         {% set total = total + entry.duration %}
         <tr>
             <td>{{ entry.begin|date('Y-m-d') }}</td>
-            <td>{{ entry.user.displayName }}</td>
             <td>{{ entry.activity ? entry.activity.name : '' }}</td>
             <td>{{ entry.description }}</td>
             <td class="duration">{{ entry.duration|duration }}</td>
         </tr>
     {% else %}
-        <tr><td colspan="5" class="muted">Inga tidposter hittades.</td></tr>
+        <tr><td colspan="4" class="muted">Inga tidposter hittades.</td></tr>
     {% endfor %}
     <tr class="total">
-        <td colspan="4">Totalt</td>
+        <td colspan="3">Totalt</td>
         <td class="duration">{{ total|duration }}</td>
     </tr>
     </tbody>
