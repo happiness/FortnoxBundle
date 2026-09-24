@@ -2,13 +2,11 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+
+    KimaiPlugin\FortnoxBundle\FortnoxBundle:
+        autowire: true
+        autoconfigure: true
 
     KimaiPlugin\FortnoxBundle\:
         resource: '../../*'
-        exclude:
-            - '../../Resources/'
-
-    KimaiPlugin\FortnoxBundle\Controller\:
-        resource: '../../Controller/'
-        tags: ['controller.service_arguments']
+        exclude: '../../{DependencyInjection,Entity,Resources,Tests,tests}'

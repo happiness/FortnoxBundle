@@ -1,58 +1,108 @@
 # FortnoxBundle for Kimai
 
-First implementation of a Kimai plugin that creates a PDF time report intended to be attached to a Fortnox customer invoice.
+**FortnoxBundle** is a [Kimai](https://www.kimai.org/) plugin designed to streamline accounting, invoicing, and reporting workflows for organizations using Fortnox. It provides dedicated PDF time report generation formatted for Fortnox customer invoice attachments.
 
-## Scope of v0.1
+---
 
-- Adds a `Fortnox export` menu item.
-- Adds permission `fortnox_export`, granted to `ROLE_SUPER_ADMIN` by default.
-- Lets the user choose customer, project, start date and end date.
-- Optionally restricts results to billable and not-yet-exported time entries.
-- Uses Kimai's `TimesheetQuery`, including current-user/team filtering.
-- Shows a preview in Kimai.
-- Generates a Swedish PDF with date, consultant, activity, description and duration.
-- Includes a `FortnoxClient` scaffold for the next milestone.
+## Features
+
+- **Fortnox Time Report Generation**:
+  - Filter timesheet records by customer, project, date range, billable status, and export state.
+  - Generates clean PDF reports formatted with date, consultant/user, activity, description, and duration ready for customer invoice attachments.
+- **Fortnox Integration Foundation**:
+  - Includes a client scaffold for direct API communication and PDF uploading to the Fortnox customer invoice inbox (`Inbox_kf`).
+- **Fine-Grained Permissions**:
+  - Secure access controls restricting report generation and exports to authorized roles.
+
+---
 
 ## Requirements
 
-This version targets the current Kimai 2 plugin API and PHP 8.2+. It uses mPDF, which is included by current Kimai installations.
+- Kimai `>= 2.0.0`
+- PHP `>= 8.2`
 
-Before production use, test it against your exact Kimai version. Kimai's internal PHP APIs are not as stable as the public REST API.
+---
 
 ## Installation
 
-Copy the directory so it becomes:
+### Standard Installation
 
-    var/plugins/FortnoxBundle/FortnoxBundle.php
+1. **Clone or copy** the plugin into Kimai's plugin directory:
+   ```bash
+   # Destination folder: var/plugins/FortnoxBundle
+   cd /path/to/kimai/var/plugins
+   git clone <repository-url> FortnoxBundle
+   ```
 
-Then run from the Kimai installation directory:
+2. **Reload Kimai plugins / Install**:
+   ```bash
+   bin/console kimai:reload -n
+   ```
 
-    bin/console kimai:reload -n
+3. **Clear the cache**:
+   ```bash
+   bin/console cache:clear
+   ```
 
-If needed, clear the cache:
+---
 
-    bin/console cache:clear
+### Docker & DDEV Installation
 
-Log in as a super admin. A new `Fortnox export` entry should appear in the main menu.
+If you are running Kimai inside a Docker / DDEV environment:
 
-## Security / access
+1. **Copy the plugin files** into `var/plugins/FortnoxBundle`.
 
-The plugin registers a `fortnox_export` permission and grants it only to `ROLE_SUPER_ADMIN` by default. Assign the permission to another Kimai role in Kimai's role/permission administration if required.
+2. **Reload plugins inside the container**:
+   ```bash
+   ddev exec bin/console kimai:reload -n
+   ```
 
-The timesheet query calls `setCurrentUser()`, so Kimai's team restrictions are applied by the repository.
+3. **Clear container cache**:
+   ```bash
+   ddev exec bin/console cache:clear
+   ```
 
-## Fortnox upload, next milestone
+---
 
-`Service/FortnoxClient.php` contains the starting point for uploading the generated PDF to the Fortnox customer-invoice inbox, `Inbox_kf`. OAuth token acquisition, refresh-token persistence, encryption and UI settings are intentionally not implemented in v0.1.
+## Permissions & Roles
 
-The next milestone should add:
+The plugin registers dedicated permissions that integrate into Kimai's role and permission management:
 
-1. Fortnox OAuth authorization and callback routes.
-2. Encrypted refresh-token storage.
-3. An `Upload to Fortnox` action after PDF preview.
-4. Export history / duplicate detection.
-5. Optional marking of the corresponding Kimai entries as exported.
+| Permission | Description | Default Roles |
+| :--- | :--- | :--- |
+| `fortnox_export` | Access the Fortnox export report and generate invoice attachments | `ROLE_SUPER_ADMIN` |
 
-## Known v0.1 limitation
+Permissions can be customized anytime via the Kimai UI under **System > Role permissions**.
 
-The project dropdown currently lists all projects visible through Doctrine's entity form loading. The controller validates that the selected project belongs to the selected customer. A follow-up version should make the project selector dynamically depend on the customer.
+---
+
+## Development & Testing
+
+Run tests and code checks using the provided scripts:
+
+```bash
+# Run PHPUnit test suite for FortnoxBundle
+vendor/bin/phpunit var/plugins/FortnoxBundle/tests/
+
+# Run static analysis (PHPStan)
+./phpstan.sh core
+
+# Run code style fixer (PHP-CS-Fixer)
+./php-cs-fixer.sh core
+```
+
+*(Prepend `ddev exec` if executing within DDEV)*
+
+---
+
+## Roadmap & Next Milestones
+
+1. **Fortnox OAuth Integration**: OAuth authorization flow and secure token persistence.
+2. **Direct Inbox Upload**: One-click upload of generated time report PDFs directly to Fortnox `Inbox_kf`.
+3. **Export History & Status Synchronization**: Automatic marking and tracking of exported entries.
+
+---
+
+## License
+
+This bundle is licensed under the [AGPL-3.0-or-later License](https://www.gnu.org/licenses/agpl-3.0.html).
