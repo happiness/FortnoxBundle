@@ -2,6 +2,8 @@
 {% import "macros/widgets.html.twig" as widgets %}
 
 {% block main %}
+    <p><a href="{{ path('fortnox_overview') }}"><i class="fas fa-arrow-left"></i> {{ 'fortnox.back_to_overview'|trans }}</a></p>
+
     {% if error %}
         {{ widgets.callout('danger', error) }}
     {% endif %}

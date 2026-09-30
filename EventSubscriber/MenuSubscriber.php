@@ -33,7 +33,7 @@ final class MenuSubscriber implements EventSubscriberInterface
         }
 
         $event->getMenu()->addChild(
-            new MenuItemModel('fortnox_export', 'fortnox.menu', 'fortnox_report', [], 'fas fa-file-pdf')
+            new MenuItemModel('fortnox_export', 'fortnox.menu', 'fortnox_overview', [], 'fas fa-file-pdf')
         );
     }
 }

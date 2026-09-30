@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+{% import "macros/widgets.html.twig" as widgets %}
+
+{% block main %}
+    <form method="get" action="{{ path('fortnox_overview') }}">
+        {% embed '@theme/embeds/card.html.twig' %}
+            {% block box_title %}{{ 'fortnox.overview.title'|trans }}{% endblock %}
+            {% block box_body %}
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label" for="fortnox-month">{{ 'fortnox.overview.month'|trans }}</label>
+                        <div class="input-group">
+                            <a class="btn btn-icon" href="{{ path('fortnox_overview', {month: previousMonth|date('Y-m'), billableOnly: billableOnly ? 1 : 0, notExportedOnly: notExportedOnly ? 1 : 0}) }}" title="{{ 'fortnox.overview.previous'|trans }}">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <input class="form-control" type="month" id="fortnox-month" name="month" value="{{ month|date('Y-m') }}">
+                            <a class="btn btn-icon" href="{{ path('fortnox_overview', {month: nextMonth|date('Y-m'), billableOnly: billableOnly ? 1 : 0, notExportedOnly: notExportedOnly ? 1 : 0}) }}" title="{{ 'fortnox.overview.next'|trans }}">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" name="billableOnly" value="1"{{ billableOnly ? ' checked' : '' }}>
+                            <span class="form-check-label">{{ 'fortnox.form.billable_only'|trans }}</span>
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" name="notExportedOnly" value="1"{{ notExportedOnly ? ' checked' : '' }}>
+                            <span class="form-check-label">{{ 'fortnox.form.not_exported_only'|trans }}</span>
+                        </label>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> {{ 'fortnox.overview.show'|trans }}</button>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
+
+    {% embed '@theme/embeds/card.html.twig' %}
+        {% block box_title %}{{ month|date('Y-m') }}{% endblock %}
+        {% block box_body_class %}p-0{% endblock %}
+        {% block box_body %}
+            {% if customers is empty %}
+                <div class="p-3">{{ 'fortnox.overview.no_data'|trans }}</div>
+            {% else %}
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>{{ 'fortnox.overview.project'|trans }}</th>
+                        <th class="text-end">{{ 'fortnox.overview.entries'|trans }}</th>
+                        <th class="text-end">{{ 'fortnox.overview.total'|trans }}</th>
+                        <th class="text-end">{{ 'fortnox.overview.billable'|trans }}</th>
+                        <th class="text-end">{{ 'fortnox.overview.not_exported'|trans }}</th>
+                    </tr>
+                    </thead>
+                    {% for customer in customers %}
+                        <tbody>
+                        <tr class="table-active">
+                            <th>{{ customer.name }}</th>
+                            <th class="text-end">{{ customer.entries }}</th>
+                            <th class="text-end">{{ customer.duration|duration }}</th>
+                            <th class="text-end">{{ customer.billable|duration }}</th>
+                            <th class="text-end">{{ customer.notExported|duration }}</th>
+                        </tr>
+                        {% for project in customer.projects %}
+                            {% set url = path('fortnox_report', {project: project.id, begin: begin|date('Y-m-d'), end: end|date('Y-m-d'), billableOnly: billableOnly ? 1 : 0, notExportedOnly: notExportedOnly ? 1 : 0}) %}
+                            <tr onclick="window.location.href = this.querySelector('a').href" style="cursor: pointer">
+                                <td class="ps-4"><a href="{{ url }}">{{ project.name }}</a></td>
+                                <td class="text-end">{{ project.entries }}</td>
+                                <td class="text-end">{{ project.duration|duration }}</td>
+                                <td class="text-end">{{ project.billable|duration }}</td>
+                                <td class="text-end">{{ project.notExported|duration }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    {% endfor %}
+                </table>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}
