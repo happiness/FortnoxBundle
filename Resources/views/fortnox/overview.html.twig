@@ -41,6 +41,13 @@
 
     {% embed '@theme/embeds/card.html.twig' %}
         {% block box_title %}{{ month|date('Y-m') }}{% endblock %}
+        {% block box_tools %}
+            {% if customers is not empty %}
+                <a class="btn btn-primary" href="{{ path('fortnox_export_month', {month: month|date('Y-m'), billableOnly: billableOnly ? 1 : 0, notExportedOnly: notExportedOnly ? 1 : 0}) }}">
+                    <i class="fas fa-file-archive"></i> {{ 'fortnox.overview.export_all'|trans }}
+                </a>
+            {% endif %}
+        {% endblock %}
         {% block box_body_class %}p-0{% endblock %}
         {% block box_body %}
             {% if customers is empty %}

@@ -18,6 +18,8 @@ fortnox:
         billable: 'Billable'
         not_exported: 'Not exported'
         no_data: 'No time was recorded for this month.'
+        export_all: 'Export all projects (zip)'
+        export_nothing: 'There is nothing to export for the selected month and filters.'
     back_to_overview: 'Back to overview'
     form:
         customer: 'Customer'

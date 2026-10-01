@@ -10,6 +10,7 @@ Use this guide when working on the **FortnoxBundle** plugin in `var/plugins/Fort
 - **Description**: Kimai plugin designed to streamline accounting, invoicing, and reporting workflows for organizations integrating with Fortnox.
 - **Primary Capabilities**:
   - Dedicated time report generation and PDF exports formatted as Fortnox customer invoice attachments.
+  - Monthly bulk export: one PDF per project with time in the selected month, delivered as a single zip (`fortnox_export_month`, `MonthlyExportService`).
   - Export preview enhancements including aggregated User and Activity summary breakdowns.
   - Service foundation for direct Fortnox REST API communication and invoice inbox (`Inbox_kf`) uploads.
 - **Scope Boundary**: All plugin development, templates, configuration, and tests must remain strictly isolated within `var/plugins/FortnoxBundle/` and plugin-specific test paths. **Never modify Kimai core files** in `src/`, `templates/`, `config/`, or `migrations/`.
@@ -34,7 +35,7 @@ var/plugins/FortnoxBundle/
 ├── FortnoxBundle.php                  # Bundle entry point (implements App\Plugin\PluginInterface)
 ├── README.md                          # User & developer documentation
 ├── Controller/
-│   └── FortnoxController.php          # Time report and export controller actions
+│   └── FortnoxController.php          # Overview, time report and monthly zip export actions
 ├── DependencyInjection/
 │   └── FortnoxExtension.php          # Container extension (prepends Twig views path)
 ├── EventSubscriber/
@@ -56,6 +57,7 @@ var/plugins/FortnoxBundle/
 │           └── index.html.twig        # Overridden core export preview template
 ├── Service/
 │   ├── FortnoxClient.php              # Fortnox API communication client
+│   ├── MonthlyExportService.php       # One PDF per project for a month, packed as zip
 │   ├── PdfGenerator.php               # Time report PDF rendering service
 │   └── TimeReportService.php          # Timesheet data filtering and report aggregation
 └── tests/

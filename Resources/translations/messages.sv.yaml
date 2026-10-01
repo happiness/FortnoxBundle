@@ -18,6 +18,8 @@ fortnox:
         billable: 'Debiterbar'
         not_exported: 'Ej exporterad'
         no_data: 'Ingen tid registrerad för den här månaden.'
+        export_all: 'Exportera alla projekt (zip)'
+        export_nothing: 'Det finns inget att exportera för vald månad och valda filter.'
     back_to_overview: 'Tillbaka till översikten'
     form:
         customer: 'Kund'

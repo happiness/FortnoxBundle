@@ -9,6 +9,10 @@
 - **Fortnox Time Report Generation**:
   - Filter timesheet records by customer, project, date range, billable status, and export state.
   - Generates clean PDF reports formatted with date, consultant/user, activity, description, and duration ready for customer invoice attachments.
+- **Export all projects for a month**:
+  - The monthly overview has an "Export all projects (zip)" button. It downloads one zip with a time report PDF per project that has time recorded in the selected month.
+  - The "Billable only" and "Not exported only" filters of the overview apply. The export does not mark entries as exported.
+  - Projects without matching entries are left out. If nothing matches, you are sent back to the overview with a message.
 - **Fortnox Integration Foundation**:
   - Includes a client scaffold for direct API communication and PDF uploading to the Fortnox customer invoice inbox (`Inbox_kf`).
 - **Fine-Grained Permissions**:

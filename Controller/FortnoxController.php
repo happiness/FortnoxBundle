@@ -10,12 +10,17 @@ use App\Repository\ProjectRepository;
 use App\Utils\PageSetup;
 use KimaiPlugin\FortnoxBundle\Form\Model\TimeReportFilter;
 use KimaiPlugin\FortnoxBundle\Form\TimeReportType;
+use KimaiPlugin\FortnoxBundle\Service\MonthlyExportService;
 use KimaiPlugin\FortnoxBundle\Service\PdfGenerator;
 use KimaiPlugin\FortnoxBundle\Service\TimeReportService;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/admin/fortnox')]
 #[IsGranted('fortnox_export')]
@@ -25,6 +30,8 @@ final class FortnoxController extends AbstractController
         private readonly TimeReportService $reports,
         private readonly PdfGenerator $pdfGenerator,
         private readonly ProjectRepository $projects,
+        private readonly MonthlyExportService $monthlyExport,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -58,6 +65,38 @@ final class FortnoxController extends AbstractController
             'notExportedOnly' => $notExportedOnly,
             'customers' => $this->reports->summarizeMonth($begin, $billableOnly, $notExportedOnly),
         ]);
+    }
+
+    /**
+     * One PDF per project with time in the month, delivered as a single zip file.
+     */
+    #[Route(path: '/export', name: 'fortnox_export_month', methods: ['GET'])]
+    public function exportMonth(Request $request): Response
+    {
+        $timezone = $this->getDateTimeFactory()->getTimezone();
+        $month = \DateTime::createFromFormat('!Y-m', (string) $request->query->get('month', ''), $timezone);
+        $billableOnly = $request->query->getBoolean('billableOnly');
+        $notExportedOnly = $request->query->getBoolean('notExportedOnly');
+
+        if ($month !== false) {
+            $archive = $this->monthlyExport->createArchive($month, $billableOnly, $notExportedOnly, $this->currentUser());
+            if ($archive !== null) {
+                $response = new BinaryFileResponse($archive['path']);
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archive['filename']);
+                $response->headers->set('Content-Type', 'application/zip');
+                $response->deleteFileAfterSend(true);
+
+                return $response;
+            }
+        }
+
+        $this->addFlash('error', $this->translator->trans('fortnox.overview.export_nothing'));
+
+        return new RedirectResponse($this->generateUrl('fortnox_overview', [
+            'month' => $request->query->get('month'),
+            'billableOnly' => $billableOnly ? 1 : 0,
+            'notExportedOnly' => $notExportedOnly ? 1 : 0,
+        ]));
     }
 
     #[Route(path: '/report', name: 'fortnox_report', methods: ['GET', 'POST'])]
